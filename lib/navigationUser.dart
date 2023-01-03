@@ -3,8 +3,9 @@ import 'package:golite/homePageUser.dart';
 
 import 'inputReviewPage.dart';
 import 'main.dart';
+import 'reviewPage.dart';
 
-enum DrawerSections{
+enum DrawerSections {
   home,
   review,
   inputReview,
@@ -28,11 +29,11 @@ class _NavigationUserState extends State<NavigationUser> {
 
     if (currentPage == DrawerSections.home) {
       container = const HomePageUser();
-    }else if (currentPage == DrawerSections.review) {
-      container = const InputReviewPage();
+    } else if (currentPage == DrawerSections.review) {
+      container = const ReviewPage();
     }
 
-    if (notInput == 0){
+    if (notInput == 0) {
       if (widget.page == DrawerSections.inputReview) {
         // container = const InputReviewPage();
       }
@@ -43,71 +44,72 @@ class _NavigationUserState extends State<NavigationUser> {
         backgroundColor: Colors.green[700],
         actions: [
           Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: IconButton(
-                  onPressed: (){
+              padding: const EdgeInsets.all(10.0),
+              child: IconButton(
+                  onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => NavigationUser()),
                     );
                   },
-                  icon: Image.asset("logo_white_icon.png")
-              )
-          )
+                  icon: Image.asset("logo_white_icon.png")))
         ],
       ),
       body: container,
       drawer: Drawer(
-        backgroundColor: Colors.green[700],
-        child: SingleChildScrollView(
-          child: Column(
+          backgroundColor: Colors.green[700],
+          child: SingleChildScrollView(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(30, 25, 160, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.asset('logo_white.png'),
-                    const SizedBox(height: 5,),
-                    const Text("User", style: TextStyle(color: Colors.white, fontSize: 20),)
-                  ]
-                )
-              ),
-              MyDrawerList(),
+                  padding: const EdgeInsets.fromLTRB(30, 25, 160, 20),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Image.asset('logo_white.png'),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        const Text(
+                          "User",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        )
+                      ])),
+              myDrawerList(),
               Padding(
-                padding: const EdgeInsets.fromLTRB(27, 360, 0, 0),
-                child: Column(
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Role()),
-                        );
-                      },
-                      icon: const Icon(Icons.logout_outlined),
-                      label: const Text("Keluar"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.green[700],
-                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                        elevation: 0
-                      ),
-                    )
-                  ],
-                )
-              )
+                  padding: const EdgeInsets.fromLTRB(27, 360, 0, 0),
+                  child: Column(
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Role()),
+                          );
+                        },
+                        icon: const Icon(Icons.logout_outlined),
+                        label: const Text("Keluar"),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.green[700],
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 10),
+                            elevation: 0),
+                      )
+                    ],
+                  ))
             ],
-          )
-        )
-      ),
+          ))),
     );
   }
 
-  Widget MyDrawerList(){
+  Widget myDrawerList() {
     return Container(
-      padding: const EdgeInsets.only(top: 15,),
+      padding: const EdgeInsets.only(
+        top: 15,
+      ),
       child: Column(
         children: [
           menuItem(0, "Home", Icons.home_outlined,
@@ -119,17 +121,17 @@ class _NavigationUserState extends State<NavigationUser> {
     );
   }
 
-  Widget menuItem(int id, String title, IconData icon, bool selected){
+  Widget menuItem(int id, String title, IconData icon, bool selected) {
     return Material(
       color: selected ? Colors.green[600] : Colors.transparent,
       child: InkWell(
-        onTap: (){
+        onTap: () {
           Navigator.pop(context);
           setState(() {
-            if(id == 0){
+            if (id == 0) {
               currentPage = DrawerSections.home;
               notInput = 1;
-            } else if(id == 1){
+            } else if (id == 1) {
               currentPage = DrawerSections.review;
               notInput = 1;
             }
@@ -141,20 +143,15 @@ class _NavigationUserState extends State<NavigationUser> {
             children: [
               Expanded(
                   child: Icon(
-                    icon,
-                    size: 25,
-                    color: Colors.white,
-                  )
-              ),
+                icon,
+                size: 25,
+                color: Colors.white,
+              )),
               Expanded(
-                flex: 5,
-                  child: Text(
-                      title,
-                      style: const TextStyle(color: Colors.white,
-                      fontSize: 16
-                      )
-                  )
-              )
+                  flex: 5,
+                  child: Text(title,
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 16)))
             ],
           ),
         ),
