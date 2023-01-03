@@ -1,0 +1,41 @@
+[{
+  "_id": {
+    "$oid": "63b4339f10ecf987ba2c3f22"
+  },
+  "star": 4,
+  "suggestion": [
+    "mobilnya keren",
+    "ngobrolnya seru",
+    "bersih",
+    "w"
+  ],
+  "comment": "waktu pick up sangat cepat."
+},{
+  "_id": {
+    "$oid": "63b43dd68c96d3bbab5ef5e7"
+  },
+  "star": 5
+},{
+  "_id": {
+    "$oid": "63b43ecd8c96d3bbab5ef5e9"
+  },
+  "star": 4,
+  "suggestion": [
+    "bersih"
+  ]
+},{
+  "_id": {
+    "$oid": "63b43f258c96d3bbab5ef5ea"
+  },
+  "star": 2,
+  "comment": "terlalu ngebut"
+},{
+  "_id": {
+    "$oid": "63b43f548c96d3bbab5ef5eb"
+  },
+  "star": 5,
+  "suggestion": [
+    "bersih",
+    "ngobrolnya seru"
+  ]
+}]

@@ -1,2 +1,26 @@
 PANDUAN PENGGUNAAN
-JEJAK YOS
+
+
+Mongo DB syntax
+
+> buka db
+use golite
+
+> insert review
+db.review.insert(
+  {
+    "star": 5,
+    "suggestion": 
+      [
+	  "bersih",
+	  "ngobrolnya seru"
+	]
+  }
+);
+
+db.review.insert(
+  {
+    "star": 2,
+    "comment": "terlalu ngebut"
+  }
+);

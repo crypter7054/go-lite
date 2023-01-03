@@ -1,0 +1,40 @@
+[{
+  "_id": {
+    "$oid": "63b435cd10ecf987ba2c3f41"
+  },
+  "name": "DISKON Rp40.000 Naik GoRide pakai GoPay",
+  "terms&cond": [
+    {
+      "desc": "1. Voucher berupa diskon Rp40.000, 2. Hanya berlaku untuk transaksi dengan gopay.",
+      "discount_price": 40000,
+      "min_trans": 5000,
+      "payment": "gopay"
+    }
+  ],
+  "guide": "1. Masuk ke dalam halaman 'Promo' di sebelah kiri, 2. Tekan 'Pakai' pada voucher yang ingin digunakan.",
+  "expire_date": {
+    "$date": {
+      "$numberLong": "1672444800000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "63b43a0710ecf987ba2c3f48"
+  },
+  "name": "DISKON 30% hingga Rp10.000 Naik GoRide pakai GoPay",
+  "terms&cond": [
+    {
+      "desc": "1. Voucher berupa diskon 30% maks. Rp10.000, 2. Hanya berlaku untuk transaksi dengan gopay.",
+      "discount_percent": 30,
+      "max_disc": 10000,
+      "min_trans": 5000,
+      "payment": "gopay"
+    }
+  ],
+  "guide": "1. Masuk ke dalam halaman 'Promo' di sebelah kiri, 2. Tekan 'Pakai' pada voucher yang ingin digunakan.",
+  "expire_date": {
+    "$date": {
+      "$numberLong": "1672444800000"
+    }
+  }
+}]
