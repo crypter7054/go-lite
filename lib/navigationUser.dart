@@ -35,7 +35,7 @@ class _NavigationUserState extends State<NavigationUser> {
 
     if (notInput == 0) {
       if (widget.page == DrawerSections.inputReview) {
-        // container = const InputReviewPage();
+        container = const InputReviewPage();
       }
     }
 

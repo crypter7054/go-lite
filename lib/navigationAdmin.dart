@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:golite/updateVoucher.dart';
 
 import 'homePageAdmin.dart';
 import 'inputVoucherPage.dart';
 import 'main.dart';
 import 'voucherPage.dart';
 
-enum DrawerSections {
-  home,
-  voucher,
-  inputVoucher,
-  updateVoucher,
-}
+enum DrawerSections { home, voucher, inputVoucher, deleteVoucher }
 
 class NavigationAdmin extends StatefulWidget {
   var page;
@@ -36,9 +32,9 @@ class _NavigationAdminState extends State<NavigationAdmin> {
 
     if (notInput == 0) {
       if (widget.page == DrawerSections.inputVoucher) {
-        // container = const InputVoucherPage();
-      } else if (widget.page == DrawerSections.updateVoucher) {
-        // container = const UpdateVoucherPage();
+        container = const InputVoucherPage();
+      } else if (widget.page == "updateVoucher") {
+        container = const UpdateVoucherPage();
       }
     }
 

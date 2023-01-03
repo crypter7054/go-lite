@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:golite/navigationUser.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'ScrollBehavior.dart';
+import 'navigationUser.dart';
 import 'navigationAdmin.dart';
 
 void main() {
@@ -15,7 +14,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        scrollBehavior: MyCustomScrollBehavior(),
         theme: ThemeData(
           primaryColor: Colors.green[700],
           textTheme: GoogleFonts.interTextTheme(),

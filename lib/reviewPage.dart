@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:golite/navigationUser.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});
@@ -49,7 +50,15 @@ class _ReviewPageState extends State<ReviewPage> {
                 ],
               ),
               TextButton(
-                  onPressed: () {}, // Fill here for navigation.
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NavigationUser(
+                                page: DrawerSections.inputReview,
+                              )),
+                    );
+                  }, // Fill here for navigation.
                   style: TextButton.styleFrom(
                       backgroundColor: Colors.green.shade700,
                       padding: const EdgeInsets.all(16)),
@@ -111,11 +120,11 @@ class TableRow extends DataTableSource {
   @override
   DataRow? getRow(int index) {
     return DataRow.byIndex(index: index, cells: [
-      DataCell(Text("$index+1")),
+      DataCell(Text((index + 1).toString())),
       DataCell(Text("Cell $index")),
       DataCell(Text("Cell $index")),
       DataCell(Text("Cell $index")),
-      DataCell(Text("$index+1")),
+      const DataCell(PopupMenu()),
     ]);
   }
 
@@ -127,4 +136,47 @@ class TableRow extends DataTableSource {
 
   @override
   int get selectedRowCount => 0;
+}
+
+class PopupMenu extends StatefulWidget {
+  const PopupMenu({super.key});
+
+  @override
+  State<PopupMenu> createState() => _PopupMenuState();
+}
+
+class _PopupMenuState extends State<PopupMenu> {
+  var selectedOption = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+        onSelected: (value) {
+          setState(() {
+            selectedOption = value.toString();
+          });
+        },
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6.0))),
+        itemBuilder: (BuildContext context) {
+          return [
+            PopupMenuItem(
+              value: "delete",
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.delete_outlined,
+                      color: Colors.red,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text('Hapus', style: TextStyle(color: Colors.red)),
+                  ]),
+            ),
+          ];
+        });
+  }
 }
