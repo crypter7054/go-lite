@@ -15,7 +15,7 @@ class MongoDatabase {
     return vouchers;
   }
 
-  static insertVoucherTetap(String name, String desc, int discount_price, int min_trans, String payment, String guide, DateTime expire_date){
+  static insertVoucherTetap(String name, String desc, int discount_price, int min_trans, List<String> payment, String guide, DateTime expire_date){
     voucherCollection.insertOne({
       'name': name,
       'terms&cond': [

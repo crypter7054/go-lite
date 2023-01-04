@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:golite/database/database_voucher.dart';
 
 enum confirmation { harga_tetap, persen }
 
@@ -14,6 +15,16 @@ class _InputVoucherPageState extends State<InputVoucherPage> {
   confirmation? pilih_jenis_voucher;
 
   //text editing controller for text field
+  TextEditingController name = TextEditingController();
+  TextEditingController desc = TextEditingController();
+  TextEditingController discount_price = TextEditingController();
+  TextEditingController discount_percent = TextEditingController();
+  TextEditingController max_disc = TextEditingController();
+  TextEditingController min_trans = TextEditingController();
+  List<String> payment = [];
+  TextEditingController guide = TextEditingController();
+  late DateTime expire_date;
+
   TextEditingController dateinput = TextEditingController();
 
   // checkbox
@@ -34,6 +45,7 @@ class _InputVoucherPageState extends State<InputVoucherPage> {
           children: [
             ListTile(
               title: TextFormField(
+                controller: discount_price,
                 decoration: const InputDecoration(
                   labelText: 'Diskon dalam rupiah',
                   border: OutlineInputBorder(),
@@ -55,6 +67,7 @@ class _InputVoucherPageState extends State<InputVoucherPage> {
           children: [
             ListTile(
               title: TextFormField(
+                controller: discount_percent,
                 decoration: const InputDecoration(
                   labelText: 'Diskon dalam persen',
                   border: OutlineInputBorder(),
@@ -63,6 +76,7 @@ class _InputVoucherPageState extends State<InputVoucherPage> {
             ),
             ListTile(
               title: TextFormField(
+                controller: max_disc,
                 decoration: const InputDecoration(
                   labelText: 'Diskon maksimal dalam rupiah',
                   border: OutlineInputBorder(),
@@ -122,6 +136,7 @@ class _InputVoucherPageState extends State<InputVoucherPage> {
 
                   ListTile(
                     title: TextFormField(
+                      controller: name,
                       decoration: const InputDecoration(
                         labelText: 'Nama Voucher',
                         border: OutlineInputBorder(),
@@ -131,6 +146,7 @@ class _InputVoucherPageState extends State<InputVoucherPage> {
 
                   ListTile(
                     title: TextFormField(
+                      controller: desc,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       decoration: const InputDecoration(
@@ -182,6 +198,7 @@ class _InputVoucherPageState extends State<InputVoucherPage> {
 
                   ListTile(
                     title: TextFormField(
+                      controller: min_trans,
                       decoration: const InputDecoration(
                         labelText: 'Minimal Transaksi',
                         border: OutlineInputBorder(),
@@ -257,6 +274,7 @@ class _InputVoucherPageState extends State<InputVoucherPage> {
                   ),
                   ListTile(
                     title: TextFormField(
+                      controller: guide,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       decoration: const InputDecoration(
@@ -303,6 +321,7 @@ class _InputVoucherPageState extends State<InputVoucherPage> {
 
                         if(pickedDate != null ){
                           setState(() {
+                            expire_date = pickedDate;
                             dateinput.text = '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}'; //set output date to TextField value.
                           });
                         }
@@ -349,6 +368,16 @@ class _InputVoucherPageState extends State<InputVoucherPage> {
                             ),
                             onPressed: (){
                               setState(() {
+                                for(int i=0; i < availableHobbies.length; i++){
+                                  if(availableHobbies[i]['isChecked'] == true){
+                                    payment.add(availableHobbies[i]['name']);
+                                  }
+                                }
+                                if(pilih_jenis_voucher == confirmation.harga_tetap){
+                                  MongoDatabase.insertVoucherTetap(name.text, desc.text, int.parse(discount_price.text), int.parse(min_trans.text), payment, guide.text, expire_date);
+                                }else if(pilih_jenis_voucher == confirmation.persen){
+                                  MongoDatabase.insertVoucherPersen(name.text, desc.text, int.parse(discount_percent.text), int.parse(max_disc.text), int.parse(min_trans.text), payment, guide.text, expire_date);
+                                }
                               });
                             },
                             child: const Text('Submit'),
