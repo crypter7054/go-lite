@@ -17,9 +17,9 @@ class _ReviewPageState extends State<ReviewPage> {
   final bool _isSortAsc = true;
 
   @override
-  void initState() async {
+  void initState() {
     WidgetsFlutterBinding.ensureInitialized();
-    await MongoDatabase.connect();
+    MongoDatabase.connect();
     super.initState();
   }
 

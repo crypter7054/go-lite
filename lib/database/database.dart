@@ -7,18 +7,17 @@ class MongoDatabase {
   static var db, reviewCollection;
 
   static connect() async {
-    db = await Db.create(MONGO_CONN_URL);
+    db = Db(MONGO_CONN_URL);
     await db.open();
     reviewCollection = db.collection(USER_COLLECTION);
   }
 
   static Future<List<Map<String, dynamic>>> getDocuments() async {
-    try {
-      final reviews = await reviewCollection.find().toList();
-      return reviews;
-    } catch (e) {
-      return Future.value(e) as List<Map<String, dynamic>>;
-    }
+
+    final reviews = await reviewCollection.find().toList();
+    print(reviews);
+    return reviews;
+
   }
 
   static insert(Review review) async {
