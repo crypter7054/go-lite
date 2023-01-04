@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'navigationUser.dart';
 import 'navigationAdmin.dart';
-import 'database/database.dart';
+import 'database/database_review.dart';
 
 void main() async {
   runApp(const MyApp());

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:golite/navigationUser.dart';
 
-import 'database/database.dart';
-import 'models/review.dart';
+import 'database/database_review.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});
@@ -166,17 +165,12 @@ class ReviewData extends DataTableSource {
         DataCell(
           Text(dataList[index]['star'].toString()),
         ),
-
-        if(dataList[index]['suggestion'] == null)
-          const DataCell(Text('')),
-        if(dataList[index]['suggestion'] != null)
+        if (dataList[index]['suggestion'] == null) const DataCell(Text('')),
+        if (dataList[index]['suggestion'] != null)
           DataCell(Text(dataList[index]['suggestion'].join(', '))),
-
-        if(dataList[index]['comment'] == null)
-          const DataCell(Text('')),
-        if(dataList[index]['comment'] != null)
+        if (dataList[index]['comment'] == null) const DataCell(Text('')),
+        if (dataList[index]['comment'] != null)
           DataCell(Text(dataList[index]['comment'])),
-
         const DataCell(PopupMenu()),
       ],
     );
