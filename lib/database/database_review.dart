@@ -14,23 +14,15 @@ class MongoDatabase {
     return reviews;
   }
 
+  static insertReview(int star, List<String> suggestion, String comment){
+    reviewCollection.insertOne({
+      'star': star,
+      'suggestion': suggestion,
+      'comment': comment
+    });
+  }
+
   static deleteReview(ObjectId id){
     reviewCollection.deleteOne(where.id(id));
   }
-
-  // static insert(Review review) async {
-  //   await reviewCollection.insertAll([review.toMap()]);
-  // }
-  //
-  // static update(Review review) async {
-  //   var u = await reviewCollection.findOne({"_id": review.id});
-  //   u["star"] = review.star;
-  //   u["suggestion"] = review.suggestion;
-  //   u["comment"] = review.comment;
-  //   await reviewCollection.save(u);
-  // }
-
-  // static delete(Review review) async {
-  //   await reviewCollection.remove(where.id(review.id));
-  // }
 }

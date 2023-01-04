@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:golite/database/database_review.dart';
 
 class InputReviewPage extends StatefulWidget {
   const InputReviewPage({super.key});
@@ -9,6 +10,10 @@ class InputReviewPage extends StatefulWidget {
 
 class _InputReviewPageState extends State<InputReviewPage> {
   // bool isChecked = false;
+
+  TextEditingController star = TextEditingController();
+  List<String> suggestion = [];
+  TextEditingController comment = TextEditingController();
 
   List<Map> availableHobbies = [
     {"name": "mobilnya keren", "isChecked": false},
@@ -52,6 +57,7 @@ class _InputReviewPageState extends State<InputReviewPage> {
                   children: [
                     ListTile(
                       title: TextFormField(
+                        controller: star,
                         decoration: const InputDecoration(
                           labelText: 'Star',
                           border: OutlineInputBorder(),
@@ -116,6 +122,7 @@ class _InputReviewPageState extends State<InputReviewPage> {
                     ),
                     ListTile(
                       title: TextFormField(
+                        controller: comment,
                         decoration: const InputDecoration(
                           labelText: 'Comment',
                           border: OutlineInputBorder(),
@@ -161,6 +168,12 @@ class _InputReviewPageState extends State<InputReviewPage> {
                               ),
                               onPressed: (){
                                 setState(() {
+                                  for(int i=0; i < availableHobbies.length; i++){
+                                    if(availableHobbies[i]['isChecked'] == true){
+                                      suggestion.add(availableHobbies[i]['name']);
+                                    }
+                                  }
+                                  MongoDatabase.insertReview(int.parse(star.text), suggestion, comment.text);
                                 });
                               },
                               child: const Text('Submit'),
