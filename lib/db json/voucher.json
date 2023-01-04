@@ -8,7 +8,9 @@
       "desc": "1. Voucher berupa diskon Rp40.000, 2. Hanya berlaku untuk transaksi dengan gopay.",
       "discount_price": 40000,
       "min_trans": 5000,
-      "payment": "gopay"
+      "payment": [
+        "gopay"
+      ]
     }
   ],
   "guide": "1. Masuk ke dalam halaman 'Promo' di sebelah kiri, 2. Tekan 'Pakai' pada voucher yang ingin digunakan.",
@@ -28,7 +30,9 @@
       "discount_percent": 30,
       "max_disc": 10000,
       "min_trans": 5000,
-      "payment": "gopay"
+      "payment": [
+        "gopay"
+      ]
     }
   ],
   "guide": "1. Masuk ke dalam halaman 'Promo' di sebelah kiri, 2. Tekan 'Pakai' pada voucher yang ingin digunakan.",
