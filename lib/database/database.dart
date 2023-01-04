@@ -6,14 +6,10 @@ import '../utils/constants.dart';
 class MongoDatabase {
   static var db, reviewCollection;
 
-  static connect() async {
+  static Future<List> getDocuments() async {
     db = Db(MONGO_CONN_URL);
     await db.open();
     reviewCollection = db.collection(USER_COLLECTION);
-  }
-
-  Future<List> getDocuments() async {
-
     final reviews = await reviewCollection.find().toList();
     print(reviews);
 

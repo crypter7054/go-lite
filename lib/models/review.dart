@@ -10,28 +10,28 @@ String reviewToJson(List<Review> data) =>
 
 class Review {
   Review({
-    required this._id,
+    required this.id,
     required this.star,
     required this.suggestion,
     required this.comment,
   });
 
-  ObjectId _id;
+  ObjectId id;
   int star;
   List<String> suggestion;
   String comment;
 
   factory Review.fromJson(Map<String, dynamic> json) => Review(
-    _id: json["_id"],
-    star: json["star"],
-    suggestion: json["suggestion"],
-    comment: json["comment"],
-  );
+        id: json["_id"],
+        star: json["star"],
+        suggestion: json["suggestion"],
+        comment: json["comment"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": _id,
-    "star": star,
-    "suggestion": suggestion,
-    "comment": comment,
-  };
+        "_id": id,
+        "star": star,
+        "suggestion": suggestion,
+        "comment": comment,
+      };
 }

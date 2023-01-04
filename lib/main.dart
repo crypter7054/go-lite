@@ -6,7 +6,6 @@ import 'navigationAdmin.dart';
 import 'database/database.dart';
 
 void main() async {
-  await MongoDatabase.connect();
   runApp(const MyApp());
 }
 

@@ -12,16 +12,15 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage> {
+  late Future<List> response;
+
   // Sorting table.
   final int _currentSortColumn = 0;
   final bool _isSortAsc = true;
 
-  late Future<List> response;
-
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
-    MongoDatabase.connect();
     response = MongoDatabase.getDocuments();
     super.initState();
   }
