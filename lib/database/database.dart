@@ -1,40 +1,39 @@
 import 'package:mongo_dart/mongo_dart.dart';
-import '../models/user.dart';
+import '../models/review.dart';
 
 import '../utils/constants.dart';
 
 class MongoDatabase {
-  static var db, userCollection;
+  static var db, reviewCollection;
 
   static connect() async {
     db = await Db.create(MONGO_CONN_URL);
     await db.open();
-    userCollection = db.collection(USER_COLLECTION);
+    reviewCollection = db.collection(USER_COLLECTION);
   }
 
-  // static Future<List<Map<String, dynamic>>> getDocuments() async {
-  //   try {
-  //     final users = await userCollection.find().toList();
-  //     return users;
-  //   } catch (e) {
-  //     print(e);
-  //     return Future.value(e);
-  //   }
-  // }
-
-  static insert(User user) async {
-    await userCollection.insertAll([user.toMap()]);
+  static Future<List<Map<String, dynamic>>> getDocuments() async {
+    try {
+      final reviews = await reviewCollection.find().toList();
+      return reviews;
+    } catch (e) {
+      return Future.value(e) as List<Map<String, dynamic>>;
+    }
   }
 
-  static update(User user) async {
-    var u = await userCollection.findOne({"_id": user.id});
-    u["name"] = user.name;
-    u["age"] = user.age;
-    u["phone"] = user.phone;
-    await userCollection.save(u);
+  static insert(Review review) async {
+    await reviewCollection.insertAll([review.toMap()]);
   }
 
-  static delete(User user) async {
-    await userCollection.remove(where.id(user.id));
+  static update(Review review) async {
+    var u = await reviewCollection.findOne({"_id": review.id});
+    u["star"] = review.star;
+    u["suggestion"] = review.suggestion;
+    u["comment"] = review.comment;
+    await reviewCollection.save(u);
+  }
+
+  static delete(Review review) async {
+    await reviewCollection.remove(where.id(review.id));
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:golite/navigationUser.dart';
 
+import 'database/database.dart';
+import 'models/review.dart';
+
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});
 
@@ -13,10 +16,10 @@ class _ReviewPageState extends State<ReviewPage> {
   final int _currentSortColumn = 0;
   final bool _isSortAsc = true;
 
-  var tableRow = new TableRow();
-
   @override
-  void initState() {
+  void initState() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await MongoDatabase.connect();
     super.initState();
   }
 
@@ -85,15 +88,41 @@ class _ReviewPageState extends State<ReviewPage> {
             padding:
                 const EdgeInsets.only(top: 10, bottom: 30, left: 16, right: 16),
             margin: const EdgeInsets.only(left: 12, right: 12),
-            child: PaginatedDataTable(
-                source: tableRow,
-                columns: _createColumn(),
-                sortAscending: _isSortAsc,
-                sortColumnIndex: _currentSortColumn,
-                showCheckboxColumn: true))
+            child: FutureBuilder(
+                future: MongoDatabase.getDocuments(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container(
+                      color: Colors.white,
+                      child: const LinearProgressIndicator(
+                        backgroundColor: Colors.black,
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Container(
+                      color: Colors.white,
+                      child: Center(
+                        child: Text(
+                          'Something went wrong, try again.',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return PaginatedDataTable(
+                        source: dataSource(snapshot.data),
+                        columns: _createColumn(),
+                        sortAscending: _isSortAsc,
+                        sortColumnIndex: _currentSortColumn,
+                        showCheckboxColumn: true);
+                  }
+                }))
       ],
     ));
   }
+
+  DataTableSource dataSource(List<Review> reviewList) =>
+      ReviewData(dataList: reviewList);
 
   List<DataColumn> _createColumn() {
     return [
@@ -116,26 +145,35 @@ class _ReviewPageState extends State<ReviewPage> {
   }
 }
 
-class TableRow extends DataTableSource {
-  @override
-  DataRow? getRow(int index) {
-    return DataRow.byIndex(index: index, cells: [
-      DataCell(Text((index + 1).toString())),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      const DataCell(PopupMenu()),
-    ]);
-  }
+class ReviewData extends DataTableSource {
+  ReviewData({required this.dataList});
+  final List<Review> dataList;
 
   @override
-  bool get isRowCountApproximate => true;
-
+  bool get isRowCountApproximate => false;
   @override
-  int get rowCount => 50;
-
+  int get rowCount => dataList.length;
   @override
   int get selectedRowCount => 0;
+
+  @override
+  DataRow getRow(int index) {
+    return DataRow(
+      cells: [
+        DataCell(Text((index + 1).toString())),
+        DataCell(
+          Text(dataList[index].star.toString()),
+        ),
+        DataCell(
+          Text(dataList[index].suggestion.join(", ")),
+        ),
+        DataCell(
+          Text(dataList[index].comment),
+        ),
+        const DataCell(PopupMenu()),
+      ],
+    );
+  }
 }
 
 class PopupMenu extends StatefulWidget {

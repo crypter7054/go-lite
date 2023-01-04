@@ -3,8 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'navigationUser.dart';
 import 'navigationAdmin.dart';
+import 'database/database.dart';
 
-void main() {
+void main() async {
+  await MongoDatabase.connect();
   runApp(const MyApp());
 }
 
