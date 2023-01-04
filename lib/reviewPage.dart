@@ -16,10 +16,13 @@ class _ReviewPageState extends State<ReviewPage> {
   final int _currentSortColumn = 0;
   final bool _isSortAsc = true;
 
+  late Future<List> response;
+
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
     MongoDatabase.connect();
+    response = MongoDatabase.getDocuments();
     super.initState();
   }
 
@@ -89,7 +92,7 @@ class _ReviewPageState extends State<ReviewPage> {
                 const EdgeInsets.only(top: 10, bottom: 30, left: 16, right: 16),
             margin: const EdgeInsets.only(left: 12, right: 12),
             child: FutureBuilder(
-                future: MongoDatabase.getDocuments(),
+                future: response,
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Container(

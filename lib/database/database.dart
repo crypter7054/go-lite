@@ -12,27 +12,27 @@ class MongoDatabase {
     reviewCollection = db.collection(USER_COLLECTION);
   }
 
-  static Future<List<Map<String, dynamic>>> getDocuments() async {
+  Future<List> getDocuments() async {
 
     final reviews = await reviewCollection.find().toList();
     print(reviews);
-    return reviews;
 
+    return reviewFromJson(reviews);
   }
 
-  static insert(Review review) async {
-    await reviewCollection.insertAll([review.toMap()]);
-  }
+  // static insert(Review review) async {
+  //   await reviewCollection.insertAll([review.toMap()]);
+  // }
+  //
+  // static update(Review review) async {
+  //   var u = await reviewCollection.findOne({"_id": review.id});
+  //   u["star"] = review.star;
+  //   u["suggestion"] = review.suggestion;
+  //   u["comment"] = review.comment;
+  //   await reviewCollection.save(u);
+  // }
 
-  static update(Review review) async {
-    var u = await reviewCollection.findOne({"_id": review.id});
-    u["star"] = review.star;
-    u["suggestion"] = review.suggestion;
-    u["comment"] = review.comment;
-    await reviewCollection.save(u);
-  }
-
-  static delete(Review review) async {
-    await reviewCollection.remove(where.id(review.id));
-  }
+  // static delete(Review review) async {
+  //   await reviewCollection.remove(where.id(review.id));
+  // }
 }

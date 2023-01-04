@@ -1,29 +1,37 @@
+import 'dart:convert';
+
 import 'package:mongo_dart/mongo_dart.dart';
 
+List<Review> reviewFromJson(String str) =>
+    List<Review>.from(json.decode(str).map((x) => Review.fromJson(x)));
+
+String reviewToJson(List<Review> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
 class Review {
-  ObjectId id;
+  Review({
+    required this._id,
+    required this.star,
+    required this.suggestion,
+    required this.comment,
+  });
+
+  ObjectId _id;
   int star;
   List<String> suggestion;
   String comment;
 
-  Review(
-      {required this.id,
-      required this.star,
-      required this.suggestion,
-      required this.comment});
+  factory Review.fromJson(Map<String, dynamic> json) => Review(
+    _id: json["_id"],
+    star: json["star"],
+    suggestion: json["suggestion"],
+    comment: json["comment"],
+  );
 
-  Map<String, dynamic> toMap() {
-    return {
-      '_id': id,
-      'star': star,
-      'suggestion': suggestion,
-      'comment': comment,
-    };
-  }
-
-  Review.fromMap(Map<String, dynamic> map)
-      : star = map['star'],
-        id = map['_id'],
-        suggestion = map['suggestion'],
-        comment = map['comment'];
+  Map<String, dynamic> toJson() => {
+    "_id": _id,
+    "star": star,
+    "suggestion": suggestion,
+    "comment": comment,
+  };
 }
