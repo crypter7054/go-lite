@@ -1,7 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:golite/navigationAdmin.dart';
+
+import 'database/database_voucher.dart';
 
 class VoucherPage extends StatefulWidget {
   const VoucherPage({super.key});
@@ -11,15 +15,16 @@ class VoucherPage extends StatefulWidget {
 }
 
 class _VoucherPageState extends State<VoucherPage> {
+  late Future<List> response;
+
   // Sorting table.
   final int _currentSortColumn = 0;
   final bool _isSortAsc = true;
 
-  var tableRowDiscount = new TableRowDiscount();
-  var tableRowPrice = new TableRowPrice();
-
   @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
+    response = MongoDatabase.getDocuments();
     super.initState();
   }
 
@@ -102,12 +107,35 @@ class _VoucherPageState extends State<VoucherPage> {
             padding:
                 const EdgeInsets.only(top: 10, bottom: 30, left: 16, right: 16),
             margin: const EdgeInsets.only(left: 12, right: 12),
-            child: PaginatedDataTable(
-                source: tableRowDiscount,
-                columns: _columnDiscount(),
-                sortAscending: _isSortAsc,
-                sortColumnIndex: _currentSortColumn,
-                showCheckboxColumn: true)),
+            child: FutureBuilder(
+                future: response,
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container(
+                      color: Colors.white,
+                      child: const LinearProgressIndicator(
+                        backgroundColor: Colors.black,
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Container(
+                      color: Colors.white,
+                      child: Center(
+                        child: Text(
+                          'Something went wrong, try again.',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return PaginatedDataTable(
+                        source: percentSource(snapshot.data),
+                        columns: _columnDiscount(),
+                        sortAscending: _isSortAsc,
+                        sortColumnIndex: _currentSortColumn,
+                        showCheckboxColumn: true);
+                  }
+                })),
         Container(
           margin:
               const EdgeInsets.only(left: 40, right: 40, top: 30, bottom: 0),
@@ -123,15 +151,44 @@ class _VoucherPageState extends State<VoucherPage> {
             padding:
                 const EdgeInsets.only(top: 10, bottom: 30, left: 16, right: 16),
             margin: const EdgeInsets.only(left: 12, right: 12),
-            child: PaginatedDataTable(
-                source: tableRowPrice,
-                columns: _columnPrice(),
-                sortAscending: _isSortAsc,
-                sortColumnIndex: _currentSortColumn,
-                showCheckboxColumn: true)),
+            child: FutureBuilder(
+                future: response,
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container(
+                      color: Colors.white,
+                      child: const LinearProgressIndicator(
+                        backgroundColor: Colors.black,
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Container(
+                      color: Colors.white,
+                      child: Center(
+                        child: Text(
+                          'Something went wrong, try again.',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return PaginatedDataTable(
+                        source: priceSource(snapshot.data),
+                        columns: _columnPrice(),
+                        sortAscending: _isSortAsc,
+                        sortColumnIndex: _currentSortColumn,
+                        showCheckboxColumn: true);
+                  }
+                }))
       ],
     ));
   }
+
+  DataTableSource percentSource(List<Map<String, dynamic>> voucherList) =>
+      VoucherPercentData(dataList: voucherList);
+
+  DataTableSource priceSource(List<Map<String, dynamic>> voucherList) =>
+      VoucherPriceData(dataList: voucherList);
 
   List<DataColumn> _columnDiscount() {
     return [
@@ -201,57 +258,93 @@ class _VoucherPageState extends State<VoucherPage> {
   }
 }
 
-class TableRowDiscount extends DataTableSource {
-  @override
-  DataRow? getRow(int index) {
-    return DataRow.byIndex(index: index, cells: [
-      DataCell(Text((index + 1).toString())),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      const DataCell(PopupMenu()),
-    ]);
-  }
+class VoucherPercentData extends DataTableSource {
+  VoucherPercentData({required this.dataList});
+  final List<Map<String, dynamic>> dataList;
 
   @override
-  bool get isRowCountApproximate => true;
-
+  bool get isRowCountApproximate => false;
   @override
-  int get rowCount => 50;
-
+  int get rowCount => dataList.length;
   @override
   int get selectedRowCount => 0;
+
+  @override
+  DataRow getRow(int index) {
+    return DataRow(
+      cells: [
+        DataCell(Text((index + 1).toString())),
+        DataCell(
+          Text(dataList[index]['name']),
+        ),
+        DataCell(
+          Text(dataList[index]['terms&cond'][0]['desc']),
+        ),
+        DataCell(
+          Text(dataList[index]['terms&cond'][0]['discount_percent'].toString()),
+        ),
+        DataCell(
+          Text(dataList[index]['terms&cond'][0]['max_disc'].toString()),
+        ),
+        DataCell(
+          Text(dataList[index]['terms&cond'][0]['min_trans'].toString()),
+        ),
+        DataCell(
+          Text(dataList[index]['terms&cond'][0]['payment']),
+        ),
+        DataCell(
+          Text(dataList[index]['guide']),
+        ),
+        DataCell(
+          Text(dataList[index]['expire_date'].toString()),
+        ),
+        const DataCell(PopupMenu()),
+      ],
+    );
+  }
 }
 
-class TableRowPrice extends DataTableSource {
-  @override
-  DataRow? getRow(int index) {
-    return DataRow.byIndex(index: index, cells: [
-      DataCell(Text((index + 1).toString())),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      DataCell(Text("Cell $index")),
-      const DataCell(PopupMenu()),
-    ]);
-  }
+class VoucherPriceData extends DataTableSource {
+  VoucherPriceData({required this.dataList});
+  final List<Map<String, dynamic>> dataList;
 
   @override
-  bool get isRowCountApproximate => true;
-
+  bool get isRowCountApproximate => false;
   @override
-  int get rowCount => 50;
-
+  int get rowCount => dataList.length;
   @override
   int get selectedRowCount => 0;
+
+  @override
+  DataRow getRow(int index) {
+    return DataRow(
+      cells: [
+        DataCell(Text((index + 1).toString())),
+        DataCell(
+          Text(dataList[index]['name']),
+        ),
+        DataCell(
+          Text(dataList[index]['terms&cond'][0]['desc']),
+        ),
+        DataCell(
+          Text(dataList[index]['terms&cond'][0]['price_percent'].toString()),
+        ),
+        DataCell(
+          Text(dataList[index]['terms&cond'][0]['min_trans'].toString()),
+        ),
+        DataCell(
+          Text(dataList[index]['terms&cond'][0]['payment']),
+        ),
+        DataCell(
+          Text(dataList[index]['guide']),
+        ),
+        DataCell(
+          Text(dataList[index]['expire_date'].toString()),
+        ),
+        const DataCell(PopupMenu()),
+      ],
+    );
+  }
 }
 
 class PopupMenu extends StatefulWidget {

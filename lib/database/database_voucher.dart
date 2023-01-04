@@ -10,7 +10,7 @@ class MongoDatabase {
     await db.open();
     voucherCollection = db.collection(USER_COLLECTION);
     final vouchers = await voucherCollection.find().toList();
-    print(vouchers);
+    print(vouchers[0]["terms&cond"]);
 
     return vouchers;
   }
