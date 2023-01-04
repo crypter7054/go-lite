@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:golite/navigationUser.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import 'database/database_review.dart';
 
@@ -171,14 +172,17 @@ class ReviewData extends DataTableSource {
         if (dataList[index]['comment'] == null) const DataCell(Text('')),
         if (dataList[index]['comment'] != null)
           DataCell(Text(dataList[index]['comment'])),
-        const DataCell(PopupMenu()),
+
+        DataCell(PopupMenu(id: dataList[index]['_id'])),
       ],
     );
   }
 }
 
 class PopupMenu extends StatefulWidget {
-  const PopupMenu({super.key});
+  const PopupMenu({super.key, required this.id});
+
+  final mongo.ObjectId id;
 
   @override
   State<PopupMenu> createState() => _PopupMenuState();
@@ -192,7 +196,7 @@ class _PopupMenuState extends State<PopupMenu> {
     return PopupMenuButton(
         onSelected: (value) {
           setState(() {
-            selectedOption = value.toString();
+            MongoDatabase.deleteReview(widget.id);
           });
         },
         shape: const RoundedRectangleBorder(

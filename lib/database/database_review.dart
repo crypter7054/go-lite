@@ -10,9 +10,12 @@ class MongoDatabase {
     await db.open();
     reviewCollection = db.collection(USER_COLLECTION);
     final reviews = await reviewCollection.find().toList();
-    print(reviews);
 
     return reviews;
+  }
+
+  static deleteReview(ObjectId id){
+    reviewCollection.deleteOne(where.id(id));
   }
 
   // static insert(Review review) async {
