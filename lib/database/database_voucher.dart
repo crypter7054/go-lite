@@ -31,7 +31,7 @@ class MongoDatabase {
     });
   }
 
-  static insertVoucherPersen(String name, String desc, int discount_percent, int max_disc, int min_trans, String payment, String guide, DateTime expire_date){
+  static insertVoucherPersen(String name, String desc, int discount_percent, int max_disc, int min_trans, List<String> payment, String guide, DateTime expire_date){
     voucherCollection.insertOne({
       'name': name,
       'terms&cond': [
