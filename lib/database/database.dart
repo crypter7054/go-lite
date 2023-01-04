@@ -13,7 +13,7 @@ class MongoDatabase {
     final reviews = await reviewCollection.find().toList();
     print(reviews);
 
-    return reviewFromJson(reviews);
+    return reviews;
   }
 
   // static insert(Review review) async {

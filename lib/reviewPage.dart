@@ -123,7 +123,7 @@ class _ReviewPageState extends State<ReviewPage> {
     ));
   }
 
-  DataTableSource dataSource(List<Review> reviewList) =>
+  DataTableSource dataSource(List<Map<String, dynamic>> reviewList) =>
       ReviewData(dataList: reviewList);
 
   List<DataColumn> _createColumn() {
@@ -149,7 +149,7 @@ class _ReviewPageState extends State<ReviewPage> {
 
 class ReviewData extends DataTableSource {
   ReviewData({required this.dataList});
-  final List<Review> dataList;
+  final List<Map<String, dynamic>> dataList;
 
   @override
   bool get isRowCountApproximate => false;
@@ -164,14 +164,18 @@ class ReviewData extends DataTableSource {
       cells: [
         DataCell(Text((index + 1).toString())),
         DataCell(
-          Text(dataList[index].star.toString()),
+          Text(dataList[index]['star'].toString()),
         ),
+
         DataCell(
-          Text(dataList[index].suggestion.join(", ")),
+          Text('0'),
         ),
-        DataCell(
-          Text(dataList[index].comment),
-        ),
+
+        if(dataList[index]['comment'] == null)
+          const DataCell(Text('')),
+        if(dataList[index]['comment'] != null)
+          DataCell(Text(dataList[index]['comment'])),
+
         const DataCell(PopupMenu()),
       ],
     );
