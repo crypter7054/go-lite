@@ -9,7 +9,7 @@ class HomePageUser extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('logo.png'),
+          Image.asset('assets/logo.png'),
           const SizedBox(height: 5,),
           const Text("User", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
         ],

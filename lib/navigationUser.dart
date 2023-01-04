@@ -52,7 +52,7 @@ class _NavigationUserState extends State<NavigationUser> {
                       MaterialPageRoute(builder: (context) => NavigationUser()),
                     );
                   },
-                  icon: Image.asset("logo_white_icon.png")))
+                  icon: Image.asset("assets/logo_white_icon.png")))
         ],
       ),
       body: container,
@@ -67,7 +67,7 @@ class _NavigationUserState extends State<NavigationUser> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset('logo_white.png'),
+                        Image.asset('assets/logo_white.png'),
                         const SizedBox(
                           height: 5,
                         ),

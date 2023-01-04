@@ -167,9 +167,10 @@ class ReviewData extends DataTableSource {
           Text(dataList[index]['star'].toString()),
         ),
 
-        DataCell(
-          Text('0'),
-        ),
+        if(dataList[index]['suggestion'] == null)
+          const DataCell(Text('')),
+        if(dataList[index]['suggestion'] != null)
+          DataCell(Text(dataList[index]['suggestion'].join(', '))),
 
         if(dataList[index]['comment'] == null)
           const DataCell(Text('')),

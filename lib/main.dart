@@ -42,7 +42,7 @@ class Role extends StatelessWidget {
             child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset('logo.png'),
+        Image.asset('assets/logo.png'),
         const SizedBox(
           height: 15,
         ),
