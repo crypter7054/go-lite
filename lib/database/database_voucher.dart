@@ -60,6 +60,7 @@ class MongoDatabase {
 
   static updateVoucherTetap(ObjectId id,String name, String desc, int discount_price, int min_trans, List<String> payment, String guide, DateTime expire_date){
     voucherCollection.update(where.id(id), modify.unset('max_disc'));
+    voucherCollection.update(where.id(id), modify.unset('discount_percent'));
     voucherCollection.update(where.id(id), modify.set('name', name));
     voucherCollection.update(where.id(id), modify.set('desc', desc));
     voucherCollection.update(where.id(id), modify.set('discount_price', discount_price));
@@ -70,9 +71,10 @@ class MongoDatabase {
   }
 
   static updateVoucherPersen(ObjectId id,String name, String desc, int discount_percent, int max_disc, int min_trans, List<String> payment, String guide, DateTime expire_date){
+    voucherCollection.update(where.id(id), modify.unset('discount_price'));
     voucherCollection.update(where.id(id), modify.set('name', name));
     voucherCollection.update(where.id(id), modify.set('desc', desc));
-    voucherCollection.update(where.id(id), modify.set('discount_price', discount_percent));
+    voucherCollection.update(where.id(id), modify.set('discount_percent', discount_percent));
     voucherCollection.update(where.id(id), modify.set('max_disc', max_disc));
     voucherCollection.update(where.id(id), modify.set('min_trans', min_trans));
     voucherCollection.update(where.id(id), modify.set('payment', payment));
