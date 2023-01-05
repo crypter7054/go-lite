@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'database/database_voucher.dart';
+
 enum confirmation { harga_tetap, persen }
 
 class UpdateVoucherPage extends StatefulWidget {
@@ -11,6 +13,7 @@ class UpdateVoucherPage extends StatefulWidget {
 
 class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
   confirmation? pilih_jenis_voucher;
+  late Future response;
 
   //text editing controller for text field
   TextEditingController dateinput = TextEditingController();
@@ -73,6 +76,7 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
   @override
   void initState() {
     setState(() {
+
       pilih_jenis_voucher = confirmation.harga_tetap;
     });
     dateinput.text = ""; //set the initial value of text field

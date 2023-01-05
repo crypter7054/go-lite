@@ -15,6 +15,15 @@ class MongoDatabase {
     return vouchers;
   }
 
+  static Future getOneDocuments(ObjectId id) async {
+    db = Db(MONGO_CONN_URL);
+    await db.open();
+    voucherCollection = db.collection(USER_COLLECTION);
+    final vouchers = await voucherCollection.find(where.id(id));
+
+    return vouchers;
+  }
+
   static insertVoucherTetap(String name, String desc, int discount_price, int min_trans, List<String> payment, String guide, DateTime expire_date){
     voucherCollection.insertOne({
       'name': name,
@@ -46,6 +55,33 @@ class MongoDatabase {
       'guide': guide,
       'expire_date': expire_date
     });
+
+  }
+
+  static updateVoucherTetap(ObjectId id,String name, String desc, int discount_price, int min_trans, List<String> payment, String guide, DateTime expire_date){
+    voucherCollection.update(where.id(id), modify.unset('max_disc'));
+    voucherCollection.update(where.id(id), modify.set('name', name));
+    voucherCollection.update(where.id(id), modify.set('desc', desc));
+    voucherCollection.update(where.id(id), modify.set('discount_price', discount_price));
+    voucherCollection.update(where.id(id), modify.set('min_trans', min_trans));
+    voucherCollection.update(where.id(id), modify.set('payment', payment));
+    voucherCollection.update(where.id(id), modify.set('guide', guide));
+    voucherCollection.update(where.id(id), modify.set('expire_date', expire_date));
+  }
+
+  static updateVoucherPersen(ObjectId id,String name, String desc, int discount_percent, int max_disc, int min_trans, List<String> payment, String guide, DateTime expire_date){
+    voucherCollection.update(where.id(id), modify.set('name', name));
+    voucherCollection.update(where.id(id), modify.set('desc', desc));
+    voucherCollection.update(where.id(id), modify.set('discount_price', discount_percent));
+    voucherCollection.update(where.id(id), modify.set('max_disc', max_disc));
+    voucherCollection.update(where.id(id), modify.set('min_trans', min_trans));
+    voucherCollection.update(where.id(id), modify.set('payment', payment));
+    voucherCollection.update(where.id(id), modify.set('guide', guide));
+    voucherCollection.update(where.id(id), modify.set('expire_date', expire_date));
+  }
+
+  static deleteVoucher(ObjectId id,){
+    voucherCollection.deleteOne(where.id(id));
   }
 
 

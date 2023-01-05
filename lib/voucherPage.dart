@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:golite/navigationAdmin.dart';
 
 import 'database/database_voucher.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class VoucherPage extends StatefulWidget {
   const VoucherPage({super.key});
@@ -290,15 +291,16 @@ class VoucherPercentData extends DataTableSource {
           Text(dataList[index]['terms&cond'][0]['min_trans'].toString()),
         ),
         DataCell(
-          Text(dataList[index]['terms&cond'][0]['payment']),
+          Text(dataList[index]['terms&cond'][0]['payment'].join(', ')),
         ),
         DataCell(
           Text(dataList[index]['guide']),
         ),
         DataCell(
-          Text(dataList[index]['expire_date'].toString()),
+          // Text(dataList[index]['expire_date'].toString()),
+          Text('0'),
         ),
-        const DataCell(PopupMenu()),
+        DataCell(PopupMenu(id: dataList[index]['_id'])),
       ],
     );
   }
@@ -333,22 +335,25 @@ class VoucherPriceData extends DataTableSource {
           Text(dataList[index]['terms&cond'][0]['min_trans'].toString()),
         ),
         DataCell(
-          Text(dataList[index]['terms&cond'][0]['payment']),
+          Text(dataList[index]['terms&cond'][0]['payment'].join(', ')),
         ),
         DataCell(
           Text(dataList[index]['guide']),
         ),
         DataCell(
-          Text(dataList[index]['expire_date'].toString()),
+          // Text(dataList[index]['expire_date'].toString()),
+          Text('0'),
         ),
-        const DataCell(PopupMenu()),
+        DataCell(PopupMenu(id: dataList[index]['_id'])),
       ],
     );
   }
 }
 
 class PopupMenu extends StatefulWidget {
-  const PopupMenu({super.key});
+  const PopupMenu({super.key, required this.id});
+
+  final mongo.ObjectId id;
 
   @override
   State<PopupMenu> createState() => _PopupMenuState();
@@ -363,6 +368,9 @@ class _PopupMenuState extends State<PopupMenu> {
         onSelected: (value) {
           setState(() {
             selectedOption = value.toString();
+            if(selectedOption == 'deleteVoucher'){
+              MongoDatabase.deleteVoucher(widget.id);
+            }
             Navigator.push(
               context,
               MaterialPageRoute(
