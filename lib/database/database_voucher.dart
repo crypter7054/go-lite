@@ -59,6 +59,7 @@ class MongoDatabase {
 
   static updateVoucherTetap(ObjectId id,String name, String desc, int discount_price, int min_trans, List<String> payment, String guide, DateTime expire_date){
     voucherCollection.update(where.id(id),{
+      "_id": id,
       'name': name,
       'terms&cond': [
         {
@@ -75,6 +76,7 @@ class MongoDatabase {
 
   static updateVoucherPersen(ObjectId id,String name, String desc, int discount_percent, int max_disc, int min_trans, List<String> payment, String guide, DateTime expire_date){
     voucherCollection.update(where.id(id),{
+      "_id": id,
       'name': name,
       'terms&cond': [
         {
