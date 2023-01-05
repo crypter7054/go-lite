@@ -17,6 +17,16 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
   late Future response;
 
   //text editing controller for text field
+  TextEditingController name = TextEditingController();
+  TextEditingController desc = TextEditingController();
+  TextEditingController discount_price = TextEditingController();
+  TextEditingController discount_percent = TextEditingController();
+  TextEditingController max_disc = TextEditingController();
+  TextEditingController min_trans = TextEditingController();
+  List<String> payment = [];
+  TextEditingController guide = TextEditingController();
+  late DateTime expire_date;
+
   TextEditingController dateinput = TextEditingController();
 
   // checkbox
@@ -36,6 +46,7 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
         children: [
           ListTile(
             title: TextFormField(
+              controller: discount_price,
               decoration: const InputDecoration(
                 labelText: 'Diskon dalam rupiah',
                 border: OutlineInputBorder(),
@@ -55,6 +66,7 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
         children: [
           ListTile(
             title: TextFormField(
+              controller: discount_percent,
               decoration: const InputDecoration(
                 labelText: 'Diskon dalam persen',
                 border: OutlineInputBorder(),
@@ -63,6 +75,7 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
           ),
           ListTile(
             title: TextFormField(
+              controller: max_disc,
               decoration: const InputDecoration(
                 labelText: 'Diskon maksimal dalam rupiah',
                 border: OutlineInputBorder(),
@@ -76,9 +89,12 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
 
   @override
   void initState() {
-    setState(() {
-      pilih_jenis_voucher = confirmation.harga_tetap;
-    });
+
+    if(widget.id != null){
+      response = MongoDatabase.getOneDocuments(widget.id);
+    }
+    pilih_jenis_voucher = confirmation.harga_tetap;
+
     dateinput.text = ""; //set the initial value of text field
     super.initState();
   }
@@ -127,6 +143,7 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
                 children: [
                   ListTile(
                     title: TextFormField(
+                      controller: name,
                       decoration: const InputDecoration(
                         labelText: 'Nama Voucher',
                         border: OutlineInputBorder(),
@@ -136,6 +153,7 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
 
                   ListTile(
                     title: TextFormField(
+                      controller: desc,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       decoration: const InputDecoration(
@@ -188,6 +206,7 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
 
                   ListTile(
                     title: TextFormField(
+                      controller: min_trans,
                       decoration: const InputDecoration(
                         labelText: 'Minimal Transaksi',
                         border: OutlineInputBorder(),
@@ -259,6 +278,7 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
                   ),
                   ListTile(
                     title: TextFormField(
+                      controller: guide,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       decoration: const InputDecoration(
@@ -353,7 +373,20 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
                                 textStyle: const TextStyle(
                                     color: Colors.white, fontSize: 14)),
                             onPressed: () {
-                              setState(() {});
+                              setState(() {
+                                setState(() {
+                                  for(int i=0; i < availableHobbies.length; i++){
+                                    if(availableHobbies[i]['isChecked'] == true){
+                                      payment.add(availableHobbies[i]['name']);
+                                    }
+                                  }
+                                  if(pilih_jenis_voucher == confirmation.harga_tetap){
+                                    MongoDatabase.updateVoucherTetap(widget.id ,name.text, desc.text, int.parse(discount_price.text), int.parse(min_trans.text), payment, guide.text, expire_date);
+                                  }else if(pilih_jenis_voucher == confirmation.persen){
+                                    MongoDatabase.updateVoucherPersen(widget.id, name.text, desc.text, int.parse(discount_percent.text), int.parse(max_disc.text), int.parse(min_trans.text), payment, guide.text, expire_date);
+                                  }
+                                });
+                              });
                             },
                             child: const Text('Submit'),
                           ),

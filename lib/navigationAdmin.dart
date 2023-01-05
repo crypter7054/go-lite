@@ -35,7 +35,11 @@ class _NavigationAdminState extends State<NavigationAdmin> {
       if (widget.page == DrawerSections.inputVoucher) {
         container = const InputVoucherPage();
       } else if (widget.page == "updateVoucher") {
-        container = UpdateVoucherPage(id: widget.id);
+        var idUpdate;
+        if(widget.id != null){
+          idUpdate = widget.id;
+        }
+        container = UpdateVoucherPage(id: idUpdate);
       }
     }
 
