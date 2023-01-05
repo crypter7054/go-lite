@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:golite/navigationAdmin.dart';
 
 import 'database/database_voucher.dart';
+
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class VoucherPage extends StatefulWidget {
@@ -148,48 +149,61 @@ class _VoucherPageState extends State<VoucherPage> {
                 fontWeight: FontWeight.bold),
           )),
         ),
-        Container(
-            padding:
-                const EdgeInsets.only(top: 10, bottom: 30, left: 16, right: 16),
-            margin: const EdgeInsets.only(left: 12, right: 12),
-            child: FutureBuilder(
-                future: response,
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(
-                      color: Colors.white,
-                      child: const LinearProgressIndicator(
-                        backgroundColor: Colors.black,
-                      ),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Container(
-                      color: Colors.white,
-                      child: Center(
-                        child: Text(
-                          'Something went wrong, try again.',
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return PaginatedDataTable(
-                        source: priceSource(snapshot.data),
-                        columns: _columnPrice(),
-                        sortAscending: _isSortAsc,
-                        sortColumnIndex: _currentSortColumn,
-                        showCheckboxColumn: true);
-                  }
-                }))
+        SingleChildScrollView(
+            child: Container(
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 30, left: 16, right: 16),
+                margin: const EdgeInsets.only(left: 12, right: 12),
+                child: FutureBuilder(
+                    future: response,
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Container(
+                          color: Colors.white,
+                          child: const LinearProgressIndicator(
+                            backgroundColor: Colors.black,
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Container(
+                          color: Colors.white,
+                          child: Center(
+                            child: Text(
+                              'Something went wrong, try again.',
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return PaginatedDataTable(
+                            dragStartBehavior: DragStartBehavior.start,
+                            source: priceSource(snapshot.data),
+                            columns: _columnPrice(),
+                            sortAscending: _isSortAsc,
+                            sortColumnIndex: _currentSortColumn,
+                            showCheckboxColumn: true);
+                      }
+                    })))
       ],
     ));
   }
 
-  DataTableSource percentSource(List<Map<String, dynamic>> voucherList) =>
-      VoucherPercentData(dataList: voucherList);
+  DataTableSource percentSource(List<Map<String, dynamic>> voucherList) {
+    List<Map<String, dynamic>> datalistDiscount = [];
+    voucherList.forEach((v) {
+      if (null != v['terms&cond'][0]['discount_percent'])
+        datalistDiscount.add(v);
+    });
+    return VoucherPercentData(dataList: datalistDiscount);
+  }
 
-  DataTableSource priceSource(List<Map<String, dynamic>> voucherList) =>
-      VoucherPriceData(dataList: voucherList);
+  DataTableSource priceSource(List<Map<String, dynamic>> voucherList) {
+    List<Map<String, dynamic>> datalistPrice = [];
+    voucherList.forEach((v) {
+      if (null != v['terms&cond'][0]['discount_price']) datalistPrice.add(v);
+    });
+    return VoucherPriceData(dataList: datalistPrice);
+  }
 
   List<DataColumn> _columnDiscount() {
     return [
@@ -291,14 +305,13 @@ class VoucherPercentData extends DataTableSource {
           Text(dataList[index]['terms&cond'][0]['min_trans'].toString()),
         ),
         DataCell(
-          Text(dataList[index]['terms&cond'][0]['payment'].join(', ')),
+          Text(dataList[index]['terms&cond'][0]['payment']),
         ),
         DataCell(
           Text(dataList[index]['guide']),
         ),
         DataCell(
-          // Text(dataList[index]['expire_date'].toString()),
-          Text('0'),
+          Text(dataList[index]['expire_date'].toString()),
         ),
         DataCell(PopupMenu(id: dataList[index]['_id'])),
       ],
@@ -329,20 +342,19 @@ class VoucherPriceData extends DataTableSource {
           Text(dataList[index]['terms&cond'][0]['desc']),
         ),
         DataCell(
-          Text(dataList[index]['terms&cond'][0]['price_percent'].toString()),
+          Text(dataList[index]['terms&cond'][0]['discount_price'].toString()),
         ),
         DataCell(
           Text(dataList[index]['terms&cond'][0]['min_trans'].toString()),
         ),
         DataCell(
-          Text(dataList[index]['terms&cond'][0]['payment'].join(', ')),
+          Text(dataList[index]['terms&cond'][0]['payment']),
         ),
         DataCell(
           Text(dataList[index]['guide']),
         ),
         DataCell(
-          // Text(dataList[index]['expire_date'].toString()),
-          Text('0'),
+          Text(dataList[index]['expire_date'].toString()),
         ),
         DataCell(PopupMenu(id: dataList[index]['_id'])),
       ],
@@ -361,14 +373,13 @@ class PopupMenu extends StatefulWidget {
 
 class _PopupMenuState extends State<PopupMenu> {
   var selectedOption = '';
-
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
         onSelected: (value) {
           setState(() {
             selectedOption = value.toString();
-            if(selectedOption == 'deleteVoucher'){
+            if (selectedOption == 'deleteVoucher') {
               MongoDatabase.deleteVoucher(widget.id);
             }
             Navigator.push(
