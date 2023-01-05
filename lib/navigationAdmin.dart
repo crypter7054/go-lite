@@ -10,7 +10,8 @@ enum DrawerSections { home, voucher, inputVoucher, deleteVoucher }
 
 class NavigationAdmin extends StatefulWidget {
   var page;
-  NavigationAdmin({super.key, this.page});
+  var id;
+  NavigationAdmin({super.key, this.page, this.id});
 
   @override
   State<NavigationAdmin> createState() => _NavigationAdminState();
@@ -34,7 +35,7 @@ class _NavigationAdminState extends State<NavigationAdmin> {
       if (widget.page == DrawerSections.inputVoucher) {
         container = const InputVoucherPage();
       } else if (widget.page == "updateVoucher") {
-        container = const UpdateVoucherPage();
+        container = UpdateVoucherPage(id: widget.id);
       }
     }
 

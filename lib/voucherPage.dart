@@ -305,7 +305,7 @@ class VoucherPercentData extends DataTableSource {
           Text(dataList[index]['terms&cond'][0]['min_trans'].toString()),
         ),
         DataCell(
-          Text(dataList[index]['terms&cond'][0]['payment']),
+          Text(dataList[index]['terms&cond'][0]['payment'].join(', ')),
         ),
         DataCell(
           Text(dataList[index]['guide']),
@@ -348,7 +348,7 @@ class VoucherPriceData extends DataTableSource {
           Text(dataList[index]['terms&cond'][0]['min_trans'].toString()),
         ),
         DataCell(
-          Text(dataList[index]['terms&cond'][0]['payment']),
+          Text(dataList[index]['terms&cond'][0]['payment'].join(', ')),
         ),
         DataCell(
           Text(dataList[index]['guide']),
@@ -381,6 +381,15 @@ class _PopupMenuState extends State<PopupMenu> {
             selectedOption = value.toString();
             if (selectedOption == 'deleteVoucher') {
               MongoDatabase.deleteVoucher(widget.id);
+            } else if (selectedOption == 'updateVoucher') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NavigationAdmin(
+                          page: selectedOption,
+                          id: widget.id,
+                        )),
+              );
             }
             Navigator.push(
               context,

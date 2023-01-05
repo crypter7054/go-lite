@@ -5,7 +5,8 @@ import 'database/database_voucher.dart';
 enum confirmation { harga_tetap, persen }
 
 class UpdateVoucherPage extends StatefulWidget {
-  const UpdateVoucherPage({super.key});
+  var id;
+  UpdateVoucherPage({super.key, this.id});
 
   @override
   State<UpdateVoucherPage> createState() => _UpdateVoucherPageState();
@@ -76,7 +77,6 @@ class _UpdateVoucherPageState extends State<UpdateVoucherPage> {
   @override
   void initState() {
     setState(() {
-
       pilih_jenis_voucher = confirmation.harga_tetap;
     });
     dateinput.text = ""; //set the initial value of text field
